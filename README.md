@@ -124,6 +124,3 @@ A interface web oferece:
 - Gráficos dinâmicos com histórico das últimas 25 leituras
 - Design responsivo e visualização intuitiva dos dados
 
-## Licença
-
-Este projeto é de código aberto e está disponível sob a licença MIT.
