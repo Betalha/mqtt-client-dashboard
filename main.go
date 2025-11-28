@@ -70,7 +70,7 @@ func main() {
 			csvWriter.Flush()
 			csvMutex.Unlock()
 
-			log.Printf("Recebido: ID=%s, T=%.1f°C, U=%.1f%%, TS=%s, Controle=%s",
+			log.Printf("Recebido: ID=%s, T=%.1f°C, U=%.1f%%, TS=%s, Controle=%t",
 				data.ID, data.Temperatura, data.Umidade, data.Timestamp, data.Controle)
 
 			broadcast <- data
