@@ -31,7 +31,7 @@ type Message struct {
 	ID          string  `json:"ID"`
 	Temperatura float64 `json:"temperatura"`
 	Umidade     float64 `json:"umidade"`
-	Timestamp   string  `json:"timestamp"`
+	Timestamp   int  `json:"timestamp"`
 	Controle    bool    `json:"controle"`
 }
 
@@ -54,26 +54,27 @@ func main() {
 	opts.SetCleanSession(true)
 
 	opts.OnConnect = func(c mqtt.Client) {
-		topic := "sensor/client"
+		topic := "atila/9999"
 		token := c.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 			var data Message
 			if err := json.Unmarshal(msg.Payload(), &data); err != nil {
 				log.Printf("Erro ao decodificar payload MQTT: %v", err)
 				return
 			}
-			csvMutex.Lock()
-			csvWriter.Write([]string{
-				data.Timestamp,
-				fmt.Sprintf("%.2f", data.Temperatura),
-				fmt.Sprintf("%.2f", data.Umidade),
-			})
-			csvWriter.Flush()
-			csvMutex.Unlock()
-
 			log.Printf("Recebido: ID=%s, T=%.1f°C, U=%.1f%%, TS=%s, Controle=%t",
 				data.ID, data.Temperatura, data.Umidade, data.Timestamp, data.Controle)
-
-			broadcast <- data
+			if data.ID == "ESP PEDRO-LEONARDO" { // filtrar por ID
+				timestamp := time.Now().Format(time.RFC3339)
+				csvMutex.Lock()
+				csvWriter.Write([]string{
+					timestamp,
+					fmt.Sprintf("%.2f", data.Temperatura),
+					fmt.Sprintf("%.2f", data.Umidade),
+				})
+				csvWriter.Flush()
+				csvMutex.Unlock()
+				broadcast <- data
+			}
 		})
 		token.Wait()
 		if token.Error() != nil {
@@ -107,7 +108,7 @@ func main() {
 	go handleMessages()
 
 	log.Println("frontend: http://localhost:8080")
-	log.Println("escutando topico: sensor/client em broker.hivemq.com")
+	log.Println("escutando topico: atila/9999 em broker.hivemq.com")
 	log.Println("dados salvos em: sensor_data.csv")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
