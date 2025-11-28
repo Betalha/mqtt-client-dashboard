@@ -105,9 +105,25 @@ const ws = new WebSocket('ws://localhost:8080/ws');
 ws.onmessage = (event) => {
   const data = JSON.parse(event.data);
   const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+  console.log(data);
   document.getElementById('temp-value').textContent = data.temperatura.toFixed(1);
   document.getElementById('hum-value').textContent = data.umidade.toFixed(1);
+  document.getElementById('sensor-id').textContent = data.ID;
+
+  const controleEl = document.getElementById('controle-indicator');
+  const labelEl = document.getElementById('controle-label');
+  
+  
+  if (data.controle === true) {
+    controleEl.className = 'status-indicator active';
+    labelEl.textContent = 'Ativo';
+  } else if (data.controle === false) {
+    controleEl.className = 'status-indicator inactive';
+    labelEl.textContent = 'Inativo';
+  } else {
+    controleEl.className = 'status-indicator';
+    labelEl.textContent = '--';
+  }
 
   labels.push(now);
   tempData.push(data.temperatura);

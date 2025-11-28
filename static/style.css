@@ -55,3 +55,33 @@ h1 {
 canvas {
   height: 100% !important;
 }
+.status-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  background-color: #cbd5e1; /* cinza (estado desconhecido) */
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+
+.status-indicator.active {
+  background-color: #10b981; /* verde (controle = true) */
+}
+
+.status-indicator.inactive {
+  background-color: #ef4444; /* vermelho (controle = false) */
+}
+
+#controle-label {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #475569;
+}
+#sensor-id {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #475569;
+  word-break: break-all;
+  padding: 8px 0;
+}

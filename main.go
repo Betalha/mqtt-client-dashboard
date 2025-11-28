@@ -28,11 +28,11 @@ var (
 )
 
 type Message struct {
-	ID          string  `json:"id"`
+	ID          string  `json:"ID"`
 	Temperatura float64 `json:"temperatura"`
 	Umidade     float64 `json:"umidade"`
-	Timestamp   string  `json:"timestamp"` // formato ISO 8601 (RFC3339)
-	Controle    string  `json:"controle"`
+	Timestamp   string  `json:"timestamp"`
+	Controle    bool    `json:"controle"`
 }
 
 func init() {
@@ -98,9 +98,9 @@ func main() {
 		csvWriter.Flush()
 	}
 
-	defer csvFile.Close() // fecha arquivo ao fim da execucao
+	defer csvFile.Close()
 
-	// Rotas HTTP (servir frontend estático)
+	// Rotas HTTP 
 	http.HandleFunc("/ws", handleConnections)
 	http.Handle("/", http.FileServer(http.Dir("./static/")))
 
